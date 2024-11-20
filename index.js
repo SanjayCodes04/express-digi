@@ -1,12 +1,14 @@
+import "dotenv/config";
 import express from "express";
 
 const app = express();
-const port = 3000;
+const port = process.env.port || 3000;
 app.use(express.json()); // to accept the data from the front-end side
 
 let teaData = [];
 let nextId = 1;
 
+// add new tea
 app.post("/teas", (req, res) => {
     const { name, price } = req.body;
     const newTea = { id: nextId++, name, price };
@@ -14,10 +16,12 @@ app.post("/teas", (req, res) => {
     res.status(201).send(newTea);
 });
 
+// get all tea
 app.get("/teas", (req, res) => {
     res.status(200).send(teaData);
 });
 
+// get tea with id
 app.get("/teas/:id", (req, res) => {
     const tea = teaData.find((t) => t.id === parseInt(req.params.id));
     if (!tea) {
